@@ -16,7 +16,7 @@ class WidgetTree extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Teehshow App'),
+        title: Text('Showtime App'),
         centerTitle: true,
         actions: [
           IconButton(

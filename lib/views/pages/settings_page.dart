@@ -88,16 +88,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   setState(() {});
                 },
               ),
-              // Text(controller.text),
-              // Checkbox.adaptive(
-              //   tristate: true,
-              //   value: isChecked,
-              //   onChanged: (bool? value) {
-              //     setState(() {
-              //       isChecked = value;
-              //     });
-              //   },
-              // ),
               CheckboxListTile.adaptive(
                 tristate: true,
                 title: Text('Click Me'),
@@ -108,14 +98,6 @@ class _SettingsPageState extends State<SettingsPage> {
                   });
                 },
               ),
-              // Switch.adaptive(
-              //   value: isSwitched,
-              //   onChanged: (bool value) {
-              //     setState(() {
-              //       isSwitched = value;
-              //     });
-              //   },
-              // ),
               SwitchListTile.adaptive(
                 title: Text('Switched me'),
                 value: isSwitched,

@@ -19,9 +19,9 @@ class _ProfilePageState extends State<ProfilePage> {
   String? imagePath;
 
   @override
-  void initstate() {
-    super.initState();
+  void initState() {
     _loadProfileData();
+    super.initState();
   }
 
   Future<void> _loadProfileData() async {
@@ -58,7 +58,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Stack(
                 children: [
                   CircleAvatar(
-                    radius: 60.0,
+                    radius: 50.0,
                     backgroundImage: imagePath != null && File(imagePath!).existsSync()
                         ? FileImage(File(imagePath!))
                         : const AssetImage('assets/images/timi.jpg') as ImageProvider,
@@ -68,8 +68,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     right: -5,child: GestureDetector(
 
                     child: Container(
-                      height: 40,
-                      width: 40,
+                      height: 30,
+                      width: 30,
                       decoration: BoxDecoration(
                         color: Theme
                             .of(context)

@@ -17,7 +17,7 @@ class WelcomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Lottie.asset('assets/lotties/welcome.json'),
+            Lottie.asset('assets/lotties/getStarted.json'),
             FittedBox(
               child: Text(
                 'Teehshow World',

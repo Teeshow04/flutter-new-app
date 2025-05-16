@@ -24,6 +24,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  get savedTheme => null;
+
   @override
   void initState() {
   initThemeMode();
@@ -32,8 +34,8 @@ class _MyAppState extends State<MyApp> {
 
   void initThemeMode() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool? repeat = prefs.getBool('KConstants.themeModeKey');
-    isDarkModeNotifier.value = repeat ?? false;
+    final bool? repeat = prefs.getBool('KConstant.themeModeKey');
+    isDarkModeNotifier.value = savedTheme ?? false;
   }
 
   @override

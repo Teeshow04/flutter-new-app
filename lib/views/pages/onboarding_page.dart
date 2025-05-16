@@ -20,7 +20,7 @@ class OnBoardingPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Lottie.asset('assets/lotties/onboarding.json'),
+            Lottie.asset('assets/lotties/welcome.json'),
 
             SizedBox(height: 20.0),
             Text('We are a community that shows your uniqueness',

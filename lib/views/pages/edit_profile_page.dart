@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditProfilePage extends StatefulWidget {
@@ -16,12 +17,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
+  final passwordController = TextEditingController();
   String? imagePath;
+  bool _obscurePassword = true;
 
   @override
   void initState() {
-    super.initState();
     _loadSavedData();
+    super.initState();
+
   }
 
   Future<void> _loadSavedData() async {
@@ -30,11 +34,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
       nameController.text = prefs.getString('name') ?? '';
       emailController.text = prefs.getString('email') ?? '';
       phoneController.text = prefs.getString('phone') ?? '';
+      passwordController.text = prefs.getString('password') ?? '';
       imagePath = prefs.getString('profileImage');
     });
   }
 
   Future<void> _pickImage() async {
+    await Permission.camera.request();
     final ImagePicker picker = ImagePicker();
     final XFile? picked = await picker.pickImage(source: ImageSource.gallery);
 
@@ -50,6 +56,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
     await prefs.setString('name', nameController.text);
     await prefs.setString('email', emailController.text);
     await prefs.setString('phone', phoneController.text);
+    await prefs.setString('password', passwordController.text);
+
+
     if (imagePath != null) {
       await prefs.setString('profileImage', imagePath!);
     }
@@ -67,7 +76,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         child: Column(
           children: [
             GestureDetector(
-              onTap: _pickImage,
+              onTap: () => _pickImage(),
               child: CircleAvatar(
                 radius: 50,
                 backgroundImage: imagePath != null
@@ -76,11 +85,23 @@ class _EditProfilePageState extends State<EditProfilePage> {
               ),
             ),
             SizedBox(height: 20),
-            TextField(controller: nameController, decoration: InputDecoration(labelText: "Full Name")),
-            TextField(controller: emailController, decoration: InputDecoration(labelText: "Email")),
-            TextField(controller: phoneController, decoration: InputDecoration(labelText: "Phone")),
+            TextField(controller: nameController, decoration: InputDecoration(labelText: 'Full Name')),
+            TextField(controller: emailController, decoration: InputDecoration(labelText: 'Email')),
+            TextField(controller: phoneController, decoration: InputDecoration(labelText: 'Phone')),
+            TextField(controller: passwordController, decoration: InputDecoration(labelText: 'password',
+              suffixIcon: IconButton(
+                  icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
+                onPressed: () {
+                  setState(() {
+                    _obscurePassword = !_obscurePassword;
+                  });
+                },
+              ),
+            ),
+              obscureText: _obscurePassword,
+            ),
             SizedBox(height: 20),
-            ElevatedButton(onPressed: _saveProfile, child: Text("Save")),
+            ElevatedButton(onPressed: _saveProfile, child: Text('Save')),
           ],
         ),
       ),

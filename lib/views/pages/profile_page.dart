@@ -16,6 +16,7 @@ class _ProfilePageState extends State<ProfilePage> {
   String name = '';
   String email = '';
   String phone = '';
+  String dob = '';
   String? imagePath;
 
   @override
@@ -30,6 +31,7 @@ class _ProfilePageState extends State<ProfilePage> {
       name = prefs.getString('name') ?? 'Tee-show04';
       email = prefs.getString('email') ?? 'teeshow@example.com';
       phone = prefs.getString('phone') ?? '+234 123 456 7890';
+      dob = prefs.getString('dob') ?? 'Not set';
       imagePath = prefs.getString('profileImage');
     });
   }
@@ -96,13 +98,16 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               child: Column(
                 children: [
-                  _buildInfoItem("Full Name", name),
+                  _buildInfoItem('Full Name', name),
                   Divider(),
-                  _buildInfoItem("Email", email),
+                  _buildInfoItem('Email', email),
                   Divider(),
-                  _buildInfoItem("Phone", phone),
+                  _buildInfoItem('Phone', phone),
                   Divider(),
-                  _buildInfoItem("Password", "••••••••"),
+                  _buildInfoItem('Password', '••••••••'),
+                  Divider(),
+                  _buildInfoItem('Date of Birth', dob),
+                  Divider(),
                 ],
               ),
             ),
@@ -114,14 +119,12 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) =>
+                    builder: (context) =>
                         EditProfilePage(onProfileUpdate: _loadProfileData),
                   ),
                 );
               },
-            ),
-            SizedBox(height: 10),
-            LogoutTile(), // imported from logout_tile.dart
+            ), // imported from logout_tile.dart
           ],
         ),
       ),

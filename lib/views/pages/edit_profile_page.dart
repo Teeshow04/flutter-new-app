@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class EditProfilePage extends StatefulWidget {
   final Function onProfileUpdate;
@@ -18,6 +20,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
+  final dobController = TextEditingController();
   String? imagePath;
   bool _obscurePassword = true;
 
@@ -35,12 +38,13 @@ class _EditProfilePageState extends State<EditProfilePage> {
       emailController.text = prefs.getString('email') ?? '';
       phoneController.text = prefs.getString('phone') ?? '';
       passwordController.text = prefs.getString('password') ?? '';
+      dobController.text = prefs.getString('dob') ?? '';
       imagePath = prefs.getString('profileImage');
     });
   }
 
   Future<void> _pickImage() async {
-    await Permission.camera.request();
+    await Permission.photos.request();
     final ImagePicker picker = ImagePicker();
     final XFile? picked = await picker.pickImage(source: ImageSource.gallery);
 
@@ -57,6 +61,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
     await prefs.setString('email', emailController.text);
     await prefs.setString('phone', phoneController.text);
     await prefs.setString('password', passwordController.text);
+    await prefs.setString('dob', dobController.text);
 
 
     if (imagePath != null) {
@@ -88,7 +93,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
             TextField(controller: nameController, decoration: InputDecoration(labelText: 'Full Name')),
             TextField(controller: emailController, decoration: InputDecoration(labelText: 'Email')),
             TextField(controller: phoneController, decoration: InputDecoration(labelText: 'Phone')),
-            TextField(controller: passwordController, decoration: InputDecoration(labelText: 'password',
+            TextField(controller: passwordController, decoration: InputDecoration(labelText: 'Password',
+
               suffixIcon: IconButton(
                   icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
                 onPressed: () {
@@ -100,6 +106,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
               obscureText: _obscurePassword,
             ),
+    TextField(
+      controller: dobController,
+        readOnly: true,
+        decoration: InputDecoration(
+            labelText: 'Date of Birth',
+        suffixIcon: Icon(Icons.calendar_today),
+        ),
+    onTap: () async {
+      DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate:
+           DateTime(2025),
+          firstDate: DateTime(1900),
+          lastDate: DateTime.now(),
+      );
+      if (pickedDate != null) {
+        setState(() {
+          dobController.text = DateFormat('dd MMM yyyy').format(pickedDate);
+        });
+      }
+    },
+    ),
             SizedBox(height: 20),
             ElevatedButton(onPressed: _saveProfile, child: Text('Save')),
           ],
@@ -108,3 +136,5 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 }
+
+

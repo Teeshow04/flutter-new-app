@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/data/notifiers.dart';
-import 'package:new_app/views/pages/welcome_page.dart';
+import 'package:new_app/views/pages/login_page.dart';
 
 class LogoutTile extends StatelessWidget {
   const LogoutTile({super.key});
@@ -26,10 +26,14 @@ class LogoutTile extends StatelessWidget {
                   child: Text('Logout'),
                   onPressed: () {
                     selectedPageNotifier.value = 0;
-                    Navigator.pushReplacement(
+                    Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => WelcomePage()),
+                        builder: (context) {
+                          return LoginPage();
+                        },
+                      ),
+                          (route) => false,
                     );
                   },
                 ),

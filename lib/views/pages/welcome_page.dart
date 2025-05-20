@@ -47,22 +47,22 @@ class WelcomePage extends StatelessWidget {
               child: Text('Get Started'),
             ),
 
-             TextButton(
-               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return LoginPage();
-                    },
-                  ),
-                );
-              },
-              style: TextButton.styleFrom(
-                minimumSize: Size(double.infinity, 40.0),
-              ),
-              child: Text('Login'),
-            ),
+            //  TextButton(
+            //    onPressed: () {
+            //     Navigator.pushReplacement(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) {
+            //           return LoginPage();
+            //         },
+            //       ),
+            //     );
+            //   },
+            //   style: TextButton.styleFrom(
+            //     minimumSize: Size(double.infinity, 40.0),
+            //   ),
+            //   child: Text('Login'),
+            // ),
           ],
         ),
       ),

@@ -34,7 +34,7 @@ class _MyAppState extends State<MyApp> {
 
   void initThemeMode() async{
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final bool? repeat = prefs.getBool('KConstant.themeModeKey');
+    final bool? _ = prefs.getBool('KConstant.themeModeKey');
     isDarkModeNotifier.value = savedTheme ?? false;
   }
 

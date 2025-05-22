@@ -1,21 +1,77 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:new_app/data/constants.dart';
-import 'package:new_app/views/pages/course_page.dart';
-import 'package:new_app/views/widgets/container_widget.dart';
 import 'package:new_app/views/widgets/hero_widget.dart';
+import 'package:http/http.dart' as http;
 
-class HomePage extends StatelessWidget {
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+  class _HomePageState extends State<HomePage> {
+  String? quote;
+  String? author;
+  bool isLoading = true;
+
+  Future<void> fetchQuote( ) async {
+
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+
+      final response = await http.get(
+          Uri.parse('https://api.api-ninjas.com/v1/quotes'),
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Api-key': 'fmEdoBzXq3HRFnUVF0me8Q==tsXMlb1apkAZEJKl',
+          });
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonData = jsonDecode(response.body);
+        if (jsonData.isNotEmpty) {
+          Map<String ,dynamic> quoteData = jsonData[0];
+
+          setState(() {
+            quote= quoteData['quote'];
+            author= quoteData['author'];
+            isLoading =false;
+          });
+        } else{
+          setState(() {
+            quote = 'No quotes avaliable';
+            author ='unknown';
+            isLoading = false;
+          });
+        }
+      } else {
+        setState(() {
+          quote = 'Failed to load quote';
+          author ='unknown';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        quote = 'Error loading quote';
+        author =e.toString();
+        isLoading = false;
+      });
+    }
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    fetchQuote();
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<String> list = [
-      KValue.weDiscoverYourUniqueness,
-      KValue.unfoldYourBold,
-      KValue.designedToBeDifferent,
-      KValue.everyGeniusTellsAStory,
-      KValue.fromBasicToIconic,
-
-    ];
     return Scaffold(
         body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.0),
@@ -24,24 +80,73 @@ class HomePage extends StatelessWidget {
                         children: [
                           SizedBox(height: 10.0),
                           HeroWidget(
-                            nextPage: CoursePage(),
                               title: 'Showtime App'),
-                          SizedBox(height: 5.0),
-                          ...List.generate(
-                              list.length, (index) {
-                            return ContainerWidget(
-                              title: list.elementAt(index),
-                              description:
-                              'This is a description of our goals',
-                            );
-                          }
+                          SizedBox(height: 20.0),
+                          Container(
+                            padding: EdgeInsets.only(left: 10.0, right:10.0),
+                            margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                            height: MediaQuery.of(context).size.height/2,
+                            decoration: BoxDecoration(color: Colors.black87,
+                            borderRadius: BorderRadius.circular(20.0)),
+                            child: isLoading ?
+                                const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.white70,
+                                  ),
+                                )
+                            : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                quote ?? "No quote avaliable",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+
+                                SizedBox(
+                                  height: 40.0,
+                                ),
+                                Text(
+                                  '-${author ?? "Unknown"}',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.w500
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ],
+
+                          SizedBox(height: 20.0),
+                          FilledButton(
+                            onPressed: () {
+                              fetchQuote();
+                            },
+                            style: FilledButton.styleFrom(
+                              backgroundColor: Colors.teal,
+                              textStyle: TextStyle(fontSize: 20.0),
+                              minimumSize: Size(double.infinity, 40.0
+                              ),
+                            ),
+
+                            child: Text('Get New Quote',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.white
+                            ),
+                            ),
+                          ),
+                        ]
                       ),
                     ),
-
               ),
       );
-
+   }
   }
-}
+

@@ -107,7 +107,6 @@ class _RegisterPageState extends State<RegisterPage> {
               margin: EdgeInsets.only(left: 15.0, right: 15.0),
               child: FilledButton(
                 onPressed: () {
-                  // Handle signup logic
                 },
                 style: FilledButton.styleFrom(
                   minimumSize: Size(double.infinity, 50.0),

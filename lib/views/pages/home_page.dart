@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:new_app/views/widgets/hero_widget.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -28,7 +29,7 @@ class HomePage extends StatefulWidget {
           Uri.parse('https://api.api-ninjas.com/v1/quotes'),
           headers: {
             'Content-Type': 'application/json',
-            'X-Api-key': 'fmEdoBzXq3HRFnUVF0me8Q==tsXMlb1apkAZEJKl',
+            'X-Api-key': dotenv.env['API_NINJAS_KEY'] ?? '',
           });
 
       if (response.statusCode == 200) {
@@ -89,7 +90,7 @@ class HomePage extends StatefulWidget {
                             decoration: BoxDecoration(color: Colors.black87,
                             borderRadius: BorderRadius.circular(20.0)),
                             child: isLoading ?
-                                const Center(
+                                 Center(
                                   child: CircularProgressIndicator(
                                     color: Colors.white70,
                                   ),
@@ -102,7 +103,7 @@ class HomePage extends StatefulWidget {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white70,
-                                    fontSize: 20.0,
+                                    fontSize: 18.0,
                                     fontWeight: FontWeight.bold
                                   ),
                                 ),
@@ -115,7 +116,7 @@ class HomePage extends StatefulWidget {
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     color: Colors.white70,
-                                      fontSize: 17.0,
+                                      fontSize: 16.0,
                                       fontWeight: FontWeight.w500
                                   ),
                                 ),
@@ -134,7 +135,6 @@ class HomePage extends StatefulWidget {
                               minimumSize: Size(double.infinity, 40.0
                               ),
                             ),
-
                             child: Text('Get New Quote',
                             style: TextStyle(
                               fontSize: 16,

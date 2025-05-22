@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:new_app/data/notifiers.dart';
-// import 'package:new_app/views/widget_tree.dart';
 import 'package:new_app/views/pages/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
-
-// Stateless
-
-// material app
-// scaffold
-// App title
-// Bottom navigation bar setState
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

@@ -21,16 +21,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   void initState() {
-    _loadProfileData();
     super.initState();
+    _loadProfileData();
+
   }
 
   Future<void> _loadProfileData() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      name = prefs.getString('name') ?? 'Tee-show04';
-      email = prefs.getString('email') ?? 'teeshow@example.com';
-      phone = prefs.getString('phone') ?? '+234 123 456 7890';
+      name = prefs.getString('name') ?? 'User';
+      email = prefs.getString('email') ?? 'user@example.com';
+      phone = prefs.getString('phone') ?? 'Not set';
       dob = prefs.getString('dob') ?? 'Not set';
       imagePath = prefs.getString('profileImage');
     });
@@ -63,7 +64,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     radius: 50.0,
                     backgroundImage: imagePath != null && File(imagePath!).existsSync()
                         ? FileImage(File(imagePath!))
-                        : const AssetImage('assets/images/timi.jpg') as ImageProvider,
+                        : const AssetImage('assets/images/profile.png') as ImageProvider,
                   ),
                   Positioned(
                     bottom: -5,

@@ -125,21 +125,24 @@ class HomePage extends StatefulWidget {
                           ),
 
                           SizedBox(height: 20.0),
-                          FilledButton(
-                            onPressed: () {
-                              fetchQuote();
-                            },
-                            style: FilledButton.styleFrom(
-                              backgroundColor: Colors.teal,
-                              textStyle: TextStyle(fontSize: 20.0),
-                              minimumSize: Size(double.infinity, 40.0
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 15.0),
+                            child: FilledButton(
+                              onPressed: () {
+                                fetchQuote();
+                              },
+                              style: FilledButton.styleFrom(
+                                backgroundColor: Colors.teal,
+                                textStyle: TextStyle(fontSize: 20.0),
+                                minimumSize: Size(double.infinity, 40.0
+                                ),
                               ),
-                            ),
-                            child: Text('Get New Quote',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white
-                            ),
+                              child: Text('Get New Quote',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white
+                              ),
+                              ),
                             ),
                           ),
                         ]
@@ -149,4 +152,3 @@ class HomePage extends StatefulWidget {
       );
    }
   }
-

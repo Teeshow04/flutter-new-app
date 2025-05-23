@@ -16,7 +16,7 @@ class WidgetTree extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Quotify App'),
+        title: Text('QuoteFlow App'),
         centerTitle: true,
         actions: [
           IconButton(

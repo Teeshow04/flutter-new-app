@@ -39,7 +39,7 @@ class HeroWidget extends StatelessWidget {
           ),
           FittedBox(
             child: Text(
-              'Quotify App',
+              'Streams of Inspiration',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: (Colors.white70),

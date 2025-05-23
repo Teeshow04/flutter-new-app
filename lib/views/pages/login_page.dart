@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:new_app/views/pages/forgotpassword_page.dart';
 import 'package:new_app/views/pages/Register_page.dart';
-import 'package:new_app/views/pages/welcome_page.dart';
-import 'package:new_app/views/widget_tree.dart';
 import 'package:new_app/views/widgets/login_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'onboarding_page.dart';
 
 TextEditingController controllerEmail = TextEditingController();
-TextEditingController controllerPw = TextEditingController();
+TextEditingController controllerPassword = TextEditingController();
 String confirmedEmail = '';
-String confirmedPw = '';
+String confirmedPassword= '';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -36,13 +32,22 @@ class _LoginPageState extends State<LoginPage> {
     _loadSavedCredentials();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _loadSavedCredentials();
+  }
+
 
   Future<void> _loadSavedCredentials() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      savedEmail = prefs.getString('email') ?? '1234';
-      savedPassword = prefs.getString('password') ?? '5678';
+      savedEmail = prefs.getString('email') ?? '';
+      savedPassword = prefs.getString('password') ?? '';
     });
+
+    controllerEmail.text = savedEmail;
+    controllerPassword.text = savedPassword;
   }
 
 
@@ -85,15 +90,6 @@ class _LoginPageState extends State<LoginPage> {
                   fontSize: 32.0,
                 ),
                 ),
-                // SizedBox(height: 10),
-
-                // SizedBox(
-                //   width: 500.0,
-                //   height: 200.0,
-                //
-                //   child: Lottie.asset('assets/lotties/login.json'),
-                // ),
-
                 SizedBox(height: 50.0,),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15.0),
@@ -154,14 +150,14 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return ForgotpasswordPage();
-                          },
-                        ),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) {
+                      //       return ForgotpasswordPage();
+                      //     },
+                      //   ),
+                      // );
                     }, child: Text('Forgot Password')),
                   ],
                 ),

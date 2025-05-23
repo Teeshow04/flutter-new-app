@@ -24,6 +24,10 @@ class _EditProfilePageState extends State<EditProfilePage> {
   String? imagePath;
   bool _obscurePassword = true;
 
+  // Store original login credentials
+  String originalEmail = '';
+  String originalPassword = '';
+
   @override
   void initState() {
     _loadSavedData();
@@ -40,6 +44,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
       passwordController.text = prefs.getString('password') ?? '';
       dobController.text = prefs.getString('dob') ?? '';
       imagePath = prefs.getString('profileImage');
+
+      originalEmail = prefs.getString('email') ?? '';
+      originalPassword = prefs.getString('password') ?? '';
     });
   }
 
@@ -56,20 +63,80 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _saveProfile() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('name', nameController.text);
-    await prefs.setString('email', emailController.text);
-    await prefs.setString('phone', phoneController.text);
-    await prefs.setString('password', passwordController.text);
-    await prefs.setString('dob', dobController.text);
-
-
-    if (imagePath != null) {
-      await prefs.setString('profileImage', imagePath!);
+    if (nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter name')),
+      );
+      return;
     }
 
-    widget.onProfileUpdate(); // callback to refresh profile
-    Navigator.pop(context);
+    String email = emailController.text.trim();
+    bool isEmailValid = RegExp(
+        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    ).hasMatch(email);
+
+    if (emailController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter email')),
+      );
+      return;
+    }
+
+    if (!isEmailValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter a valid email')),
+      );
+      return;
+    }
+
+    if (passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please enter new password')),
+      );
+      return;
+    }
+
+    if (passwordController.text.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Password must be at least 6 characters')),
+      );
+      return;
+    }
+
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('name', nameController.text);
+      await prefs.setString('email', emailController.text);
+      await prefs.setString('phone', phoneController.text);
+      await prefs.setString('password', passwordController.text);
+      await prefs.setString('dob', dobController.text);
+
+
+      if (imagePath != null) {
+        await prefs.setString('profileImage', imagePath!);
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profile updated successfully!')),
+      );
+      widget.onProfileUpdate(); // callback to refresh profile
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update profile. Please try again.')),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    phoneController.dispose();
+    passwordController.dispose();
+    dobController.dispose();
+    super.dispose();
   }
 
   @override

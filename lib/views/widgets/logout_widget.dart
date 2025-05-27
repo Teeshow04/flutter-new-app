@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/data/notifiers.dart';
-import 'package:new_app/views/pages/login_page.dart';
+import 'package:quoteflow_app/data/notifiers.dart';
+import 'package:quoteflow_app/views/pages/login_page.dart';
 
 class LogoutTile extends StatelessWidget {
   const LogoutTile({super.key});

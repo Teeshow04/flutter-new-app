@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:new_app/data/constants.dart';
-import 'package:new_app/views/pages/Register_page.dart';
-import 'package:new_app/views/pages/welcome_page.dart';
+import 'package:quoteflow_app/data/constants.dart';
+import 'package:quoteflow_app/views/pages/register_page.dart';
+import 'package:quoteflow_app/views/pages/welcome_page.dart';
 
 import 'login_page.dart';
 
-
 class OnBoardingPage extends StatelessWidget {
-  const OnBoardingPage({
-    super.key,
-  });
-
+  const OnBoardingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +34,11 @@ class OnBoardingPage extends StatelessWidget {
             Lottie.asset('assets/lotties/welcome_back.json'),
 
             SizedBox(height: 20.0),
-            Text('We are a community that shows your uniqueness',
-            style: KTextStyle.descriptionText,
-            textAlign: TextAlign.justify),
+            Text(
+              'We are a community that shows your uniqueness',
+              style: KTextStyle.descriptionText,
+              textAlign: TextAlign.justify,
+            ),
 
             SizedBox(height: 20.0),
             OutlinedButton(
@@ -56,8 +54,7 @@ class OnBoardingPage extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 textStyle: TextStyle(fontSize: 20.0),
-                minimumSize: Size(double.infinity, 60.0
-                ),
+                minimumSize: Size(double.infinity, 60.0),
               ),
 
               child: Text('Sign In'),
@@ -77,13 +74,11 @@ class OnBoardingPage extends StatelessWidget {
               },
               style: ElevatedButton.styleFrom(
                 textStyle: TextStyle(fontSize: 20.0),
-                minimumSize: Size(double.infinity, 60.0
-                ),
+                minimumSize: Size(double.infinity, 60.0),
               ),
 
               child: Text('Sign Up'),
             ),
-
           ],
         ),
       ),

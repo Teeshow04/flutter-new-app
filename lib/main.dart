@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:new_app/data/notifiers.dart';
-import 'package:new_app/views/pages/welcome_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:quoteflow_app/data/notifiers.dart';
+import 'package:quoteflow_app/views/pages/welcome_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
+
   await dotenv.load(fileName: ".env");
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 

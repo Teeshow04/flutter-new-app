@@ -5,7 +5,6 @@ import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class EditProfilePage extends StatefulWidget {
   final Function onProfileUpdate;
 
@@ -32,7 +31,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void initState() {
     _loadSavedData();
     super.initState();
-
   }
 
   Future<void> _loadSavedData() async {
@@ -64,35 +62,35 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   Future<void> _saveProfile() async {
     if (nameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter name')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please enter name')));
       return;
     }
 
     String email = emailController.text.trim();
     bool isEmailValid = RegExp(
-        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
     ).hasMatch(email);
 
     if (emailController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter email')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please enter email')));
       return;
     }
 
     if (!isEmailValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter a valid email')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please enter a valid email')));
       return;
     }
 
     if (passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter new password')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please enter new password')));
       return;
     }
 
@@ -103,7 +101,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
       return;
     }
 
-
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('name', nameController.text);
@@ -112,14 +109,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
       await prefs.setString('password', passwordController.text);
       await prefs.setString('dob', dobController.text);
 
-
       if (imagePath != null) {
         await prefs.setString('profileImage', imagePath!);
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Profile updated successfully!')),
-      );
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Profile updated successfully!')));
       widget.onProfileUpdate(); // callback to refresh profile
       Navigator.pop(context);
     } catch (e) {
@@ -151,50 +149,67 @@ class _EditProfilePageState extends State<EditProfilePage> {
               onTap: () => _pickImage(),
               child: CircleAvatar(
                 radius: 50,
-                backgroundImage: imagePath != null
-                    ? FileImage(File(imagePath!))
-                    : const AssetImage('assets/images/timi.jpg') as ImageProvider,
+                backgroundImage:
+                    imagePath != null
+                        ? FileImage(File(imagePath!))
+                        : const AssetImage('assets/images/timi.jpg')
+                            as ImageProvider,
               ),
             ),
             SizedBox(height: 20),
-            TextField(controller: nameController, decoration: InputDecoration(labelText: 'Full Name')),
-            TextField(controller: emailController, decoration: InputDecoration(labelText: 'Email')),
-            TextField(controller: phoneController, decoration: InputDecoration(labelText: 'Phone')),
-            TextField(controller: passwordController, decoration: InputDecoration(labelText: 'Password',
-
-              suffixIcon: IconButton(
-                  icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
-                onPressed: () {
-                  setState(() {
-                    _obscurePassword = !_obscurePassword;
-                  });
-                },
-              ),
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(labelText: 'Full Name'),
             ),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+            ),
+            TextField(
+              controller: phoneController,
+              decoration: InputDecoration(labelText: 'Phone'),
+            ),
+            TextField(
+              controller: passwordController,
+              decoration: InputDecoration(
+                labelText: 'Password',
+
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _obscurePassword = !_obscurePassword;
+                    });
+                  },
+                ),
+              ),
               obscureText: _obscurePassword,
             ),
-    TextField(
-      controller: dobController,
-        readOnly: true,
-        decoration: InputDecoration(
-            labelText: 'Date of Birth',
-        suffixIcon: Icon(Icons.calendar_today),
-        ),
-    onTap: () async {
-      DateTime? pickedDate = await showDatePicker(
-          context: context,
-          initialDate:
-           DateTime(2025),
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-      );
-      if (pickedDate != null) {
-        setState(() {
-          dobController.text = DateFormat('dd MMM yyyy').format(pickedDate);
-        });
-      }
-    },
-    ),
+            TextField(
+              controller: dobController,
+              readOnly: true,
+              decoration: InputDecoration(
+                labelText: 'Date of Birth',
+                suffixIcon: Icon(Icons.calendar_today),
+              ),
+              onTap: () async {
+                DateTime? pickedDate = await showDatePicker(
+                  context: context,
+                  initialDate: DateTime(2025),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime.now(),
+                );
+                if (pickedDate != null) {
+                  setState(() {
+                    dobController.text = DateFormat(
+                      'dd MMM yyyy',
+                    ).format(pickedDate);
+                  });
+                }
+              },
+            ),
             SizedBox(height: 20),
             ElevatedButton(onPressed: _saveProfile, child: Text('Save')),
           ],
@@ -203,5 +218,3 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 }
-
-

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/views/pages/login_page.dart';
+import 'package:quoteflow_app/views/pages/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class RegisterWidget extends StatelessWidget {
+class RegisterWidget extends StatefulWidget {
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;
@@ -21,82 +21,89 @@ class RegisterWidget extends StatelessWidget {
   });
 
   @override
+  State<RegisterWidget> createState() => _RegisterWidgetState();
+}
+
+class _RegisterWidgetState extends State<RegisterWidget> {
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 15.0),
-       child:  FilledButton(
-          onPressed: () => onRegisterPressed(context),
-          style: ElevatedButton.styleFrom(
-            minimumSize: Size(double.infinity, 50.0),
-          ),
-          child: Text('Sign Up'),
+      child: FilledButton(
+        onPressed: () => onRegisterPressed(context),
+        style: ElevatedButton.styleFrom(
+          minimumSize: Size(double.infinity, 50.0),
         ),
+        child: Text('Sign Up'),
+      ),
     );
   }
 
-   Future<void>onRegisterPressed(BuildContext context)  async{
-
-
-    String email = emailController.text.trim();
-    bool isEmailValid= RegExp(
-        r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+  Future<void> onRegisterPressed(BuildContext context) async {
+    String email = widget.emailController.text.trim();
+    bool isEmailValid = RegExp(
+      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
     ).hasMatch(email);
 
-    if (nameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter name')),
-      );
+    if (widget.nameController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please enter name')));
       return;
     }
 
-    if (emailController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter email')),
-      );
+    if (widget.emailController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please enter email')));
       return;
     }
 
     if (!isEmailValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter a valid email')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please enter a valid email')));
       return;
     }
 
-    if (passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please enter password')),
-      );
+    if (widget.passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please enter password')));
       return;
     }
 
-    if (passwordController.text.length < 6) {
+    if (widget.passwordController.text.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Password must be at least 6 characters')),
       );
       return;
     }
 
-    if (nameController.text.isEmpty || emailController.text.isEmpty || passwordController.text.isEmpty) {
+    if (widget.nameController.text.isEmpty ||
+        widget.emailController.text.isEmpty ||
+        widget.passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Please fill in all field')));
+      return;
+    }
+
+    if (widget.savedEmail.isNotEmpty &&
+        widget.savedEmail == widget.emailController.text.trim()) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please fill in all field')),
+        SnackBar(content: Text('User already exists! Please log in.')),
       );
       return;
     }
 
-    if (savedEmail.isNotEmpty && savedEmail == emailController.text.trim()){
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User already exists! Please log in.'))
-      );
-      return;
-    }
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('name', widget.nameController.text.trim());
+      await prefs.setString('email', widget.emailController.text.trim());
+      await prefs.setString('password', widget.passwordController.text);
 
-
-   try {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('name', nameController.text.trim());
-    await prefs.setString('email', emailController.text.trim());
-    await prefs.setString('password', passwordController.text);
+      if (!mounted) return;
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Registration Successful! Please log in.')),
@@ -109,15 +116,12 @@ class RegisterWidget extends StatelessWidget {
             return LoginPage();
           },
         ),
-            (route) => false,
+        (route) => false,
       );
-    } catch (e){
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration not successful')),
-      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Registration not successful')));
     }
   }
 }
-
-
-

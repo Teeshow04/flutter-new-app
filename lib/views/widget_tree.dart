@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:new_app/data/constants.dart';
-import 'package:new_app/data/notifiers.dart';
-import 'package:new_app/views/pages/home_page.dart';
-import 'package:new_app/views/pages/settings_page.dart';
-import 'package:new_app/views/widgets/navbar_widget.dart';
-import 'package:new_app/views/pages/profile_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quoteflow_app/data/notifiers.dart';
+import 'package:quoteflow_app/views/pages/home_page.dart';
+import 'package:quoteflow_app/views/pages/settings_page.dart';
+import 'package:quoteflow_app/views/widgets/navbar_widget.dart';
+import 'package:quoteflow_app/views/pages/profile_page.dart';
+
 
 List<Widget> pages = [HomePage(), ProfilePage()];
 

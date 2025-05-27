@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "704120399488",
+    "project_id": "authentication-app-6fb4a",
+    "storage_bucket": "authentication-app-6fb4a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:704120399488:android:96c58c594454d6059a6865",
+        "android_client_info": {
+          "package_name": "com.example.quoteflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARPGUJB12CglIYbs5IblbgNupYI8TJ4ug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

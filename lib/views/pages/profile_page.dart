@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:new_app/views/pages/edit_profile_page.dart';
-
-import '../widgets/logout_widget.dart';
+import 'package:quoteflow_app/views/pages/edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -23,7 +21,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     super.initState();
     _loadProfileData();
-
   }
 
   Future<void> _loadProfileData() async {
@@ -42,10 +39,7 @@ class _ProfilePageState extends State<ProfilePage> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label),
-          Text(value),
-        ],
+        children: [Text(label), Text(value)],
       ),
     );
   }
@@ -62,35 +56,40 @@ class _ProfilePageState extends State<ProfilePage> {
                 children: [
                   CircleAvatar(
                     radius: 50.0,
-                    backgroundImage: imagePath != null && File(imagePath!).existsSync()
-                        ? FileImage(File(imagePath!))
-                        : const AssetImage('assets/images/profile.png') as ImageProvider,
+                    backgroundImage:
+                        imagePath != null && File(imagePath!).existsSync()
+                            ? FileImage(File(imagePath!))
+                            : const AssetImage('assets/images/profile.png')
+                                as ImageProvider,
                   ),
                   Positioned(
                     bottom: -5,
-                    right: -5,child: GestureDetector(
-
-                    child: Container(
-                      height: 30,
-                      width: 30,
-                      decoration: BoxDecoration(
-                        color: Theme
-                            .of(context)
-                            .primaryColor,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 2),
+                    right: -5,
+                    child: GestureDetector(
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).primaryColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: Icon(
+                          Icons.camera_alt,
+                          color: Colors.white,
+                          size: 20,
+                        ),
                       ),
-                      child: Icon(
-                          Icons.camera_alt, color: Colors.white, size: 20),
                     ),
                   ),
-                  )
                 ],
               ),
             ),
             SizedBox(height: 16),
-            Text(name,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            Text(
+              name,
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
             SizedBox(height: 10),
             Container(
               padding: EdgeInsets.all(16),
@@ -120,8 +119,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        EditProfilePage(onProfileUpdate: _loadProfileData),
+                    builder:
+                        (context) =>
+                            EditProfilePage(onProfileUpdate: _loadProfileData),
                   ),
                 );
               },

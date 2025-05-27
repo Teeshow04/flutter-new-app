@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-import 'login_page.dart';
+// import 'login_page.dart';
 import 'onboarding_page.dart';
 
 // import 'package:new_app/views/widgets/hero_widget.dart';
@@ -20,7 +20,7 @@ class WelcomePage extends StatelessWidget {
             Lottie.asset('assets/lotties/getStarted.json'),
             FittedBox(
               child: Text(
-                'Teehshow World',
+                'QuoteFlow App',
                 style: TextStyle(
                   color: Colors.teal,
                   fontWeight: FontWeight.bold,
@@ -69,6 +69,3 @@ class WelcomePage extends StatelessWidget {
     );
   }
 }
-
-
-

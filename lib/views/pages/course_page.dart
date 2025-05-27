@@ -1,7 +1,7 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:new_app/views/widgets/hero_widget.dart';
+import 'package:quoteflow_app/views/widgets/hero_widget.dart';
 
 class CoursePage extends StatelessWidget {
   const CoursePage({super.key});

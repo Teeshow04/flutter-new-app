@@ -170,6 +170,37 @@ class _LoginPageState extends State<LoginPage> {
                     savedPassword: savedPassword,
                   ),
 
+                  SizedBox(height: 20.0),
+                  Center(
+                    child: Text(
+                      'or Login with',
+                      style: TextStyle(fontSize: 25.0),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {},
+                        child: Image.asset(
+                          'assets/images/google.png',
+                          height: 40.0,
+                        ),
+                      ),
+
+                      SizedBox(width: 30.0),
+
+                      GestureDetector(
+                        onTap: () {},
+                        child: Image.asset(
+                          'assets/images/apple.png',
+                          height: 40.0,
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 10.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

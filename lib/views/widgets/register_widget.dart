@@ -1,127 +1,243 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:quoteflow_app/views/pages/login_page.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:quoteflow_app/views/widget_tree.dart';
 
 class RegisterWidget extends StatefulWidget {
-  final TextEditingController nameController;
-  final TextEditingController emailController;
-  final TextEditingController passwordController;
-  final String savedName;
-  final String savedEmail;
-  final String savedPassword;
-
-  const RegisterWidget({
-    super.key,
-    required this.nameController,
-    required this.emailController,
-    required this.passwordController,
-    required this.savedName,
-    required this.savedEmail,
-    required this.savedPassword,
-  });
+  const RegisterWidget({super.key});
 
   @override
   State<RegisterWidget> createState() => _RegisterWidgetState();
 }
 
 class _RegisterWidgetState extends State<RegisterWidget> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  String name = '';
+  String email = '';
+  String password = '';
+
+  final _formkey = GlobalKey<FormState>();
+  bool _isLoading = false;
+  bool _obsurePassword = true;
+
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15.0),
-      child: FilledButton(
-        onPressed: () => onRegisterPressed(context),
-        style: ElevatedButton.styleFrom(
-          minimumSize: Size(double.infinity, 50.0),
-        ),
-        child: Text('Sign Up'),
-      ),
-    );
+  void dispose() {
+    nameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
-  Future<void> onRegisterPressed(BuildContext context) async {
-    String email = widget.emailController.text.trim();
-    bool isEmailValid = RegExp(
-      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-    ).hasMatch(email);
-
-    if (widget.nameController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Please enter name')));
+  onRegisterPressed() async {
+    if (!_formkey.currentState!.validate()) {
       return;
     }
 
-    if (widget.emailController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Please enter email')));
-      return;
-    }
-
-    if (!isEmailValid) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Please enter a valid email')));
-      return;
-    }
-
-    if (widget.passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Please enter password')));
-      return;
-    }
-
-    if (widget.passwordController.text.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password must be at least 6 characters')),
-      );
-      return;
-    }
-
-    if (widget.nameController.text.isEmpty ||
-        widget.emailController.text.isEmpty ||
-        widget.passwordController.text.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Please fill in all field')));
-      return;
-    }
-
-    if (widget.savedEmail.isNotEmpty &&
-        widget.savedEmail == widget.emailController.text.trim()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('User already exists! Please log in.')),
-      );
-      return;
-    }
+    setState(() {
+      _isLoading = true;
+    });
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('name', widget.nameController.text.trim());
-      await prefs.setString('email', widget.emailController.text.trim());
-      await prefs.setString('password', widget.passwordController.text);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          );
 
-      if (!mounted) return;
+      await userCredential.user?.updateDisplayName(nameController.text.trim());
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Registration Successful! Please log in.')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.green,
+            content: Text(
+              'Registered Successfully',
+              style: TextStyle(fontSize: 20.0),
+            ),
+          ),
+        );
 
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) {
-            return LoginPage();
-          },
-        ),
-        (route) => false,
-      );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => WidgetTree()),
+        );
+      }
+    } on FirebaseAuthException catch (e) {
+      if (mounted) {
+        if (e.code == 'weak-password') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.orangeAccent,
+              content: Text(
+                'Password provided is too weak',
+                style: TextStyle(fontSize: 18.0),
+              ),
+            ),
+          );
+        } else if (e.code == 'email-already-in-use') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.orangeAccent,
+              content: Text('Account already Exist'),
+            ),
+          );
+        } else if (e.code == 'invalid-email') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.orangeAccent,
+              content: Text(
+                'Invalid email address',
+                style: TextStyle(fontSize: 18.0),
+              ),
+            ),
+          );
+        }
+      }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Registration not successful')));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text('An error occured: $e'),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 15.0),
+      child: Form(
+        key: _formkey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Text('Name', style: TextStyle(fontSize: 15.0)),
+            ),
+            SizedBox(height: 10.0),
+            Container(
+              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Enter Name';
+                  }
+                },
+                controller: nameController,
+                decoration: InputDecoration(
+                  hintText: 'Enter Name',
+                  prefixIcon: Icon(Icons.person),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 10.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Text('Email', style: TextStyle(fontSize: 15.0)),
+            ),
+            SizedBox(height: 10.0),
+            Container(
+              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Enter Email';
+                  }
+                },
+                controller: emailController,
+                decoration: InputDecoration(
+                  hintText: 'Enter Email` ',
+                  prefixIcon: Icon(Icons.email),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 15.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0),
+              child: Text('Password', style: TextStyle(fontSize: 15.0)),
+            ),
+            SizedBox(height: 10.0),
+            Container(
+              margin: EdgeInsets.only(left: 10.0, right: 10.0),
+              child: TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please Enter Password';
+                  }
+                },
+                controller: passwordController,
+                obscureText: _obsurePassword,
+                decoration: InputDecoration(
+                  hintText: 'Enter Password',
+                  prefixIcon: Icon(Icons.lock),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15.0),
+                  ),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obsurePassword ? Icons.visibility_off : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obsurePassword = !_obsurePassword;
+                      });
+                    },
+                  ),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 30.0),
+
+            GestureDetector(
+              onTap: () {
+                if (_formkey.currentState!.validate()) {
+                  setState(() {
+                    name = nameController.text;
+                    email = emailController.text;
+                    password = passwordController.text;
+                  });
+                }
+                onRegisterPressed();
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 25.0),
+                child: FilledButton(
+                  onPressed: _isLoading ? null : onRegisterPressed,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50.0),
+                  ),
+                  child:
+                      _isLoading
+                          ? CircularProgressIndicator(color: Colors.white70)
+                          : Text('Sign Up'),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

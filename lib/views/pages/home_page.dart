@@ -31,36 +31,45 @@ class _HomePageState extends State<HomePage> {
         },
       );
 
+      if (!mounted) return;
+
       if (response.statusCode == 200) {
         List<dynamic> jsonData = jsonDecode(response.body);
         if (jsonData.isNotEmpty) {
           Map<String, dynamic> quoteData = jsonData[0];
-
-          setState(() {
-            quote = quoteData['quote'];
-            author = quoteData['author'];
-            isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              quote = quoteData['quote'];
+              author = quoteData['author'];
+              isLoading = false;
+            });
+          }
         } else {
+          if (mounted) {
+            setState(() {
+              quote = 'No quotes available';
+              author = 'unknown';
+              isLoading = false;
+            });
+          }
+        }
+      } else {
+        if (mounted) {
           setState(() {
-            quote = 'No quotes avaliable';
+            quote = 'Failed to load quote';
             author = 'unknown';
             isLoading = false;
           });
         }
-      } else {
+      }
+    } catch (e) {
+      if (mounted) {
         setState(() {
-          quote = 'Failed to load quote';
-          author = 'unknown';
+          quote = 'Error loading quote';
+          author = e.toString();
           isLoading = false;
         });
       }
-    } catch (e) {
-      setState(() {
-        quote = 'Error loading quote';
-        author = e.toString();
-        isLoading = false;
-      });
     }
   }
 

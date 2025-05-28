@@ -65,42 +65,28 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         );
       }
     } on FirebaseAuthException catch (e) {
+      String message = '';
+      if (e.code == 'weak-password') {
+        message = 'Password provided is too weak';
+      } else if (e.code == 'email-already-in-use') {
+        message = 'Account already Exist';
+      } else if (e.code == 'invalid-email') {
+        message = ' Invalid email address';
+      } else {
+        message = 'An error occurred. Please try again.';
+      }
+
       if (mounted) {
-        if (e.code == 'weak-password') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.teal,
-              content: Text(
-                'Password provided is too weak',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          );
-        } else if (e.code == 'email-already-in-use') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.teal,
-              content: Text('Account already Exist'),
-            ),
-          );
-        } else if (e.code == 'invalid-email') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(
-                'Invalid email address',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(backgroundColor: Colors.red, content: Text(message)),
+        );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
-            content: Text('An error occured: $e'),
+            content: Text('An error occurred: $e'),
           ),
         );
       }
@@ -159,6 +145,11 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please Enter Email';
+                  }
+                  if (!RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  ).hasMatch(value)) {
+                    return 'Please enter a valid email';
                   }
                   return null;
                 },

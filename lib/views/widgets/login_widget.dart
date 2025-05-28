@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:quoteflow_app/views/pages/forgotpassword_page.dart';
 
 import '../widget_tree.dart';
 
@@ -57,62 +58,26 @@ class _LoginWidgetState extends State<LoginWidget> {
         );
       }
     } on FirebaseAuthException catch (e) {
+      String message = '';
+      if (e.code == 'user-not-found') {
+        message = 'No user found with this email address.';
+      } else if (e.code == 'invalid-email') {
+        message = 'Invalid email address.';
+      } else {
+        message = 'An error occurred. Please try again.';
+      }
+
       if (mounted) {
-        if (e.code == 'user-not-found') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.teal,
-              content: Text(
-                'No user found for that email',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          );
-        } else if (e.code == 'wrong-password') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.teal,
-              content: Text('Wrong password provided'),
-            ),
-          );
-        } else if (e.code == 'invalid-email') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(
-                'Invalid email address',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          );
-        } else if (e.code == 'too-many-request') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.orangeAccent,
-              content: Text(
-                'Too many attempt Please try again',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              backgroundColor: Colors.red,
-              content: Text(
-                'Login failed. Please try again',
-                style: TextStyle(fontSize: 18.0),
-              ),
-            ),
-          );
-        }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(backgroundColor: Colors.red, content: Text(message)),
+        );
       }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
-            content: Text('An error occured: $e'),
+            content: Text('An error occurred: $e'),
           ),
         );
       }
@@ -146,6 +111,11 @@ class _LoginWidgetState extends State<LoginWidget> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please Enter Email';
+                  }
+                  if (!RegExp(
+                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                  ).hasMatch(value)) {
+                    return 'Please enter a valid email';
                   }
                   return null;
                 },
@@ -205,14 +175,12 @@ class _LoginWidgetState extends State<LoginWidget> {
               children: [
                 TextButton(
                   onPressed: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) {
-                    //       return ForgotpasswordPage();
-                    //     },
-                    //   ),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ForgotPasswordPage(),
+                      ),
+                    );
                   },
                   child: Text('Forgot Password'),
                 ),

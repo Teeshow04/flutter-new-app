@@ -25,6 +25,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Future<void> _loadProfileData() async {
     final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
       name = prefs.getString('name') ?? 'User';
       email = prefs.getString('email') ?? 'user@example.com';
@@ -52,37 +53,13 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             Center(
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 50.0,
-                    backgroundImage:
-                        imagePath != null && File(imagePath!).existsSync()
-                            ? FileImage(File(imagePath!))
-                            : const AssetImage('assets/images/profile.png')
-                                as ImageProvider,
-                  ),
-                  Positioned(
-                    bottom: -5,
-                    right: -5,
-                    child: GestureDetector(
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        decoration: BoxDecoration(
-                          color: Theme.of(context).primaryColor,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                        ),
-                        child: Icon(
-                          Icons.camera_alt,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+              child: CircleAvatar(
+                radius: 50.0,
+                backgroundImage:
+                    imagePath != null && File(imagePath!).existsSync()
+                        ? FileImage(File(imagePath!))
+                        : const AssetImage('assets/images/profile.png')
+                            as ImageProvider,
               ),
             ),
             SizedBox(height: 16),

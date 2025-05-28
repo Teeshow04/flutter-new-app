@@ -69,7 +69,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         if (e.code == 'weak-password') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.orangeAccent,
+              backgroundColor: Colors.teal,
               content: Text(
                 'Password provided is too weak',
                 style: TextStyle(fontSize: 18.0),
@@ -79,14 +79,14 @@ class _RegisterWidgetState extends State<RegisterWidget> {
         } else if (e.code == 'email-already-in-use') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.orangeAccent,
+              backgroundColor: Colors.teal,
               content: Text('Account already Exist'),
             ),
           );
         } else if (e.code == 'invalid-email') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: Colors.orangeAccent,
+              backgroundColor: Colors.red,
               content: Text(
                 'Invalid email address',
                 style: TextStyle(fontSize: 18.0),
@@ -160,6 +160,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                   if (value == null || value.isEmpty) {
                     return 'Please Enter Email';
                   }
+                  return null;
                 },
                 controller: emailController,
                 decoration: InputDecoration(
@@ -208,7 +209,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
               ),
             ),
 
-            SizedBox(height: 30.0),
+            SizedBox(height: 25.0),
 
             GestureDetector(
               onTap: () {
@@ -222,7 +223,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                 onRegisterPressed();
               },
               child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 25.0),
+                margin: EdgeInsets.symmetric(horizontal: 10.0),
                 child: FilledButton(
                   onPressed: _isLoading ? null : onRegisterPressed,
                   style: ElevatedButton.styleFrom(

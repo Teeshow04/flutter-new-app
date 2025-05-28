@@ -1,60 +1,10 @@
 import 'package:flutter/material.dart';
-// import 'package:quoteflow_app/views/pages/forgotpassword_page.dart';
 import 'package:quoteflow_app/views/pages/register_page.dart';
 import 'package:quoteflow_app/views/widgets/login_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'onboarding_page.dart';
 
-TextEditingController controllerEmail = TextEditingController();
-TextEditingController controllerPassword = TextEditingController();
-String confirmedEmail = '';
-String confirmedPassword = '';
-
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
-
-  @override
-  State<LoginPage> createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> {
-  late TextEditingController controllerEmail;
-  late TextEditingController controllerPassword;
-  bool _obsurePassword = true;
-  String savedEmail = '';
-  String savedPassword = '';
-
-  @override
-  void initState() {
-    super.initState();
-    controllerEmail = TextEditingController();
-    controllerPassword = TextEditingController();
-    _loadSavedCredentials();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _loadSavedCredentials();
-  }
-
-  Future<void> _loadSavedCredentials() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      savedEmail = prefs.getString('email') ?? '';
-      savedPassword = prefs.getString('password') ?? '';
-    });
-
-    controllerEmail.text = savedEmail;
-    controllerPassword.text = savedPassword;
-  }
-
-  @override
-  void dispose() {
-    controllerEmail.dispose();
-    controllerPassword.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,92 +35,13 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Text(
                     'Hello\nSign in!',
-                    style: TextStyle(color: Colors.teal, fontSize: 32.0),
+                    style: TextStyle(color: Colors.teal, fontSize: 40.0),
                   ),
+
                   SizedBox(height: 50.0),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Text('Email', style: TextStyle(fontSize: 15.0)),
-                  ),
-
-                  SizedBox(height: 15.0),
-                  TextField(
-                    controller: controllerEmail,
-                    decoration: InputDecoration(
-                      hintText: 'Enter Email',
-                      prefixIcon: Icon(Icons.email),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
-                    onEditingComplete: () {
-                      setState(() {});
-                    },
-                  ),
-
-                  SizedBox(height: 20.0),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Text('Password', style: TextStyle(fontSize: 15.0)),
-                  ),
+                  LoginWidget(),
 
                   SizedBox(height: 10.0),
-                  TextField(
-                    controller: controllerPassword,
-                    decoration: InputDecoration(
-                      hintText: 'Enter Password',
-                      prefixIcon: Icon(Icons.password),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obsurePassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obsurePassword = !_obsurePassword;
-                          });
-                        },
-                      ),
-                    ),
-                    obscureText: _obsurePassword,
-                    onEditingComplete: () {
-                      setState(() {});
-                    },
-                  ),
-
-                  // SizedBox(height: 5.0,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) {
-                          //       return ForgotpasswordPage();
-                          //     },
-                          //   ),
-                          // );
-                        },
-                        child: Text('Forgot Password'),
-                      ),
-                    ],
-                  ),
-
-                  SizedBox(height: 10.0),
-                  LoginWidget(
-                    emailController: controllerEmail,
-                    passwordController: controllerPassword,
-                    savedEmail: savedEmail,
-                    savedPassword: savedPassword,
-                  ),
-
-                  SizedBox(height: 20.0),
                   Center(
                     child: Text(
                       'or Login with',
@@ -197,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Image.asset(
                           'assets/images/apple.png',
                           height: 40.0,
+                          color: Colors.black87,
                         ),
                       ),
                     ],

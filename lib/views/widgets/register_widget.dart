@@ -59,9 +59,10 @@ class _RegisterWidgetState extends State<RegisterWidget> {
           ),
         );
 
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => WidgetTree()),
+          (route) => false,
         );
       }
     } on FirebaseAuthException catch (e) {
@@ -103,131 +104,138 @@ class _RegisterWidgetState extends State<RegisterWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 15.0),
-      child: Form(
-        key: _formkey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: AutofillGroup(
+        child: Form(
+          key: _formkey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Text('Name', style: TextStyle(fontSize: 15.0)),
-            ),
-            SizedBox(height: 10.0),
-            Container(
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Enter Name';
-                  }
-                },
-                controller: nameController,
-                decoration: InputDecoration(
-                  hintText: 'Enter Name',
-                  prefixIcon: Icon(Icons.person),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Text('Name', style: TextStyle(fontSize: 15.0)),
               ),
-            ),
-
-            SizedBox(height: 10.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Text('Email', style: TextStyle(fontSize: 15.0)),
-            ),
-            SizedBox(height: 10.0),
-            Container(
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Enter Email';
-                  }
-                  if (!RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Enter Email` ',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                ),
-              ),
-            ),
-
-            SizedBox(height: 15.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Text('Password', style: TextStyle(fontSize: 15.0)),
-            ),
-            SizedBox(height: 10.0),
-            Container(
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Enter Password';
-                  }
-                },
-                controller: passwordController,
-                obscureText: _obsurePassword,
-                decoration: InputDecoration(
-                  hintText: 'Enter Password',
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obsurePassword ? Icons.visibility_off : Icons.visibility,
+              SizedBox(height: 10.0),
+              Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Name';
+                    }
+                  },
+                  controller: nameController,
+                  autofillHints: [AutofillHints.name],
+                  decoration: InputDecoration(
+                    hintText: 'Enter Name',
+                    prefixIcon: Icon(Icons.person),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _obsurePassword = !_obsurePassword;
-                      });
-                    },
                   ),
                 ),
               ),
-            ),
 
-            SizedBox(height: 25.0),
-
-            GestureDetector(
-              onTap: () {
-                if (_formkey.currentState!.validate()) {
-                  setState(() {
-                    name = nameController.text;
-                    email = emailController.text;
-                    password = passwordController.text;
-                  });
-                }
-                onRegisterPressed();
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 10.0),
-                child: FilledButton(
-                  onPressed: _isLoading ? null : onRegisterPressed,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50.0),
+              SizedBox(height: 10.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Text('Email', style: TextStyle(fontSize: 15.0)),
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Email';
+                    }
+                    if (!RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
+                  },
+                  controller: emailController,
+                  autofillHints: [AutofillHints.email],
+                  decoration: InputDecoration(
+                    hintText: 'Enter Email` ',
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
                   ),
-                  child:
-                      _isLoading
-                          ? CircularProgressIndicator(color: Colors.white70)
-                          : Text('Sign Up'),
                 ),
               ),
-            ),
-          ],
+
+              SizedBox(height: 15.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Text('Password', style: TextStyle(fontSize: 15.0)),
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Password';
+                    }
+                  },
+                  controller: passwordController,
+                  autofillHints: [AutofillHints.name],
+                  obscureText: _obsurePassword,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Password',
+                    prefixIcon: Icon(Icons.lock),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obsurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obsurePassword = !_obsurePassword;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+
+              SizedBox(height: 25.0),
+
+              GestureDetector(
+                onTap: () {
+                  if (_formkey.currentState!.validate()) {
+                    setState(() {
+                      name = nameController.text;
+                      email = emailController.text;
+                      password = passwordController.text;
+                    });
+                  }
+                  onRegisterPressed();
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10.0),
+                  child: FilledButton(
+                    onPressed: _isLoading ? null : onRegisterPressed,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50.0),
+                    ),
+                    child:
+                        _isLoading
+                            ? CircularProgressIndicator(color: Colors.white70)
+                            : Text('Sign Up'),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

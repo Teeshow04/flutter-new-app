@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quoteflow_app/service/auth.dart';
 import 'package:quoteflow_app/views/pages/register_page.dart';
 import 'package:quoteflow_app/views/widgets/login_widget.dart';
 import 'onboarding_page.dart';
@@ -54,7 +55,9 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          AuthMethods().signInWithGoogle(context);
+                        },
                         child: Image.asset(
                           'assets/images/google.png',
                           height: 40.0,

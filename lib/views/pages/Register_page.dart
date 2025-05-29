@@ -42,30 +42,32 @@ class RegisterPage extends StatelessWidget {
             SizedBox(height: 30.0),
             RegisterWidget(),
 
-            SizedBox(height: 20.0),
-            Center(
-              child: Text(
-                'or Login with',
-                style: TextStyle(fontSize: 25.0),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(height: 18.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                GestureDetector(
-                  onTap: () {},
-                  child: Image.asset('assets/images/google.png', height: 40.0),
-                ),
+            // SizedBox(height: 20.0),
+            // Center(
+            //   child: Text(
+            //     'or Login with',
+            //     style: TextStyle(fontSize: 25.0),
+            //     textAlign: TextAlign.center,
+            //   ),
+            // ),
+            // SizedBox(height: 18.0),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     GestureDetector(
+            //       onTap: () {
+            //         // AuthMethods().signUpWithGoogle(context);
+            //       },
+            //       child: Image.asset('assets/images/google.png', height: 40.0),
+            //     ),
 
-                SizedBox(width: 30.0),
-                GestureDetector(
-                  onTap: () {},
-                  child: Image.asset('assets/images/apple.png', height: 40.0),
-                ),
-              ],
-            ),
+            //     SizedBox(width: 30.0),
+            //     GestureDetector(
+            //       onTap: () {},
+            //       child: Image.asset('assets/images/apple.png', height: 40.0),
+            //     ),
+            //   ],
+            // ),
             SizedBox(height: 10.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

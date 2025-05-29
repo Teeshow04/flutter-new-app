@@ -52,9 +52,10 @@ class _LoginWidgetState extends State<LoginWidget> {
           ),
         );
 
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => WidgetTree()),
+          (route) => false,
         );
       }
     } on FirebaseAuthException catch (e) {
@@ -94,126 +95,129 @@ class _LoginWidgetState extends State<LoginWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 35.0),
-      child: Form(
-        key: _formkey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      child: AutofillGroup(
+        child: Form(
+          key: _formkey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
 
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Text('Email', style: TextStyle(fontSize: 15.0)),
-            ),
-            SizedBox(height: 10.0),
-            Container(
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Enter Email';
-                  }
-                  if (!RegExp(
-                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                  ).hasMatch(value)) {
-                    return 'Please enter a valid email';
-                  }
-                  return null;
-                },
-                controller: emailController,
-                decoration: InputDecoration(
-                  hintText: 'Enter Email` ',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                ),
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Text('Email', style: TextStyle(fontSize: 15.0)),
               ),
-            ),
-
-            SizedBox(height: 15.0),
-            Padding(
-              padding: const EdgeInsets.only(left: 15.0),
-              child: Text('Password', style: TextStyle(fontSize: 15.0)),
-            ),
-            SizedBox(height: 10.0),
-            Container(
-              margin: EdgeInsets.only(left: 10.0, right: 10.0),
-              child: TextFormField(
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please Enter Password';
-                  }
-                  return null;
-                },
-                controller: passwordController,
-                obscureText: _obscurePassword,
-                decoration: InputDecoration(
-                  hintText: 'Enter Password',
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      _obscurePassword
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _obscurePassword = !_obscurePassword;
-                      });
-                    },
-                  ),
-                ),
-              ),
-            ),
-
-            // SizedBox(height: 15.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ForgotPasswordPage(),
-                      ),
-                    );
+              SizedBox(height: 10.0),
+              Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Email';
+                    }
+                    if (!RegExp(
+                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                    ).hasMatch(value)) {
+                      return 'Please enter a valid email';
+                    }
+                    return null;
                   },
-                  child: Text('Forgot Password'),
-                ),
-              ],
-            ),
-
-            SizedBox(height: 10.0),
-
-            GestureDetector(
-              onTap: () {
-                if (_formkey.currentState!.validate()) {
-                  setState(() {
-                    email = emailController.text;
-                    password = passwordController.text;
-                  });
-                }
-                onLoginPressed();
-              },
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 15.0),
-                child: FilledButton(
-                  onPressed: _isLoading ? null : onLoginPressed,
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50.0),
+                  controller: emailController,
+                  autofillHints: [AutofillHints.email],
+                  decoration: InputDecoration(
+                    hintText: 'Enter Email` ',
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
                   ),
-                  child:
-                      _isLoading
-                          ? CircularProgressIndicator(color: Colors.white70)
-                          : Text('Login'),
                 ),
               ),
-            ),
-          ],
+
+              SizedBox(height: 15.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 15.0),
+                child: Text('Password', style: TextStyle(fontSize: 15.0)),
+              ),
+              SizedBox(height: 10.0),
+              Container(
+                margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                child: TextFormField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please Enter Password';
+                    }
+                    return null;
+                  },
+                  controller: passwordController,
+                  obscureText: _obscurePassword,
+                  decoration: InputDecoration(
+                    hintText: 'Enter Password',
+                    prefixIcon: Icon(Icons.lock),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(15.0),
+                    ),
+                    suffixIcon: IconButton(
+                      icon: Icon(
+                        _obscurePassword
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _obscurePassword = !_obscurePassword;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
+
+              // SizedBox(height: 15.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ForgotPasswordPage(),
+                        ),
+                      );
+                    },
+                    child: Text('Forgot Password'),
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 10.0),
+
+              GestureDetector(
+                onTap: () {
+                  if (_formkey.currentState!.validate()) {
+                    setState(() {
+                      email = emailController.text;
+                      password = passwordController.text;
+                    });
+                  }
+                  onLoginPressed();
+                },
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 15.0),
+                  child: FilledButton(
+                    onPressed: _isLoading ? null : onLoginPressed,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 50.0),
+                    ),
+                    child:
+                        _isLoading
+                            ? CircularProgressIndicator(color: Colors.white70)
+                            : Text('Login', style: TextStyle(fontSize: 20.0)),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

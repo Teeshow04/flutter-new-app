@@ -12,7 +12,20 @@
           "package_name": "com.example.quoteflow"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "704120399488-e2u1c5316pfbhq68l86th33aof6qc1s9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.quoteflow",
+            "certificate_hash": "b410ee00f1de55008bd1bc6d752f23ebd0dbeb07"
+          }
+        },
+        {
+          "client_id": "704120399488-4hfm67cga3g6r1tr7hmb0jm95jsn1rgh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyARPGUJB12CglIYbs5IblbgNupYI8TJ4ug"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "704120399488-4hfm67cga3g6r1tr7hmb0jm95jsn1rgh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

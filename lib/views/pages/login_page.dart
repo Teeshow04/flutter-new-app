@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                         child: Image.asset(
                           'assets/images/apple.png',
                           height: 40.0,
-                          color: Colors.black87,
+                          color: Colors.teal,
                         ),
                       ),
                     ],

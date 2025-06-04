@@ -19,12 +19,12 @@ class AuthMethods {
         await googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication? googleSignInAuthentication =
+      final GoogleSignInAuthentication googleSignInAuthentication =
           await googleSignInAccount.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
-        idToken: googleSignInAuthentication?.idToken,
-        accessToken: googleSignInAuthentication?.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+        accessToken: googleSignInAuthentication.accessToken,
       );
 
       UserCredential result = await firebaseAuth.signInWithCredential(
@@ -32,22 +32,22 @@ class AuthMethods {
       );
       User? userDetails = result.user;
 
-      if (result != null) {
-        Map<String, dynamic> userInfoMap = {
-          'email': userDetails!.email,
-          'name': userDetails.displayName,
-          'imgUrl': userDetails.photoURL,
-          'id': userDetails.uid,
-        };
-        await DatabaseMethod().addUser(userDetails.uid, userInfoMap).then((
-          value,
-        ) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => WidgetTree()),
-          );
-        });
-      }
+      // if (result != null) {
+      Map<String, dynamic> userInfoMap = {
+        'email': userDetails!.email,
+        'name': userDetails.displayName,
+        'imgUrl': userDetails.photoURL,
+        'id': userDetails.uid,
+      };
+      await DatabaseMethod().addUser(userDetails.uid, userInfoMap).then((
+        value,
+      ) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WidgetTree()),
+        );
+      });
+      // }
     }
   }
 }

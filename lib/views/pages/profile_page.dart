@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:quoteflow_app/views/pages/edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -20,20 +18,30 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    _loadProfileData();
+    // _loadProfileData();
   }
 
-  Future<void> _loadProfileData() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (!mounted) return;
-    setState(() {
-      name = prefs.getString('name') ?? 'User';
-      email = prefs.getString('email') ?? 'user@example.com';
-      phone = prefs.getString('phone') ?? 'Not set';
-      dob = prefs.getString('dob') ?? 'Not set';
-      imagePath = prefs.getString('profileImage');
-    });
-  }
+  // Future<void> _loadProfileData() async {
+  //   final user = FirebaseAuth.instanceFor.currentUser
+
+  //   if (user != null) {
+  //     final doc =
+  //         await FirebaseFirestore.instance
+  //             .collection('users')
+  //             .doc(user.uid)
+  //             .get();
+  //     final data = doc.data();
+
+  //     if (!mounted || data == null) return;
+  //     setState(() {
+  //       name = data['name'] ?? 'User';
+  //       email = data['email'] ?? 'user@example.com';
+  //       phone = data['phone'] ?? 'Not set';
+  //       dob = data['dob'] ?? 'Not set';
+  //       imagePath = data['imgUrl'];
+  //     });
+  //   }
+  // }
 
   Widget _buildInfoItem(String label, String value) {
     return Padding(
@@ -89,20 +97,20 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             SizedBox(height: 10),
-            ListTile(
-              leading: Icon(Icons.edit, color: Colors.grey),
-              title: Text('Edit Profile'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder:
-                        (context) =>
-                            EditProfilePage(onProfileUpdate: _loadProfileData),
-                  ),
-                );
-              },
-            ), // imported from logout_tile.dart
+            // ListTile(
+            //   leading: Icon(Icons.edit, color: Colors.grey),
+            //   title: Text('Edit Profile'),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder:
+            //             (context) =>
+            //                 // EditProfilePage(onProfileUpdate: _loadProfileData),
+            //       ),
+            //     );
+            //   },
+            // ), // imported from logout_tile.dart
           ],
         ),
       ),

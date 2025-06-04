@@ -5,7 +5,6 @@ import 'package:quoteflow_app/views/pages/settings_page.dart';
 import 'package:quoteflow_app/views/widgets/navbar_widget.dart';
 import 'package:quoteflow_app/views/pages/profile_page.dart';
 
-
 List<Widget> pages = [HomePage(), ProfilePage()];
 
 class WidgetTree extends StatelessWidget {
@@ -15,6 +14,7 @@ class WidgetTree extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text('QuoteFlow App'),
         centerTitle: true,
         actions: [

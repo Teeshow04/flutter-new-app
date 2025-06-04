@@ -123,6 +123,7 @@ class _RegisterWidgetState extends State<RegisterWidget> {
                     if (value == null || value.isEmpty) {
                       return 'Please Enter Name';
                     }
+                    return null;
                   },
                   controller: nameController,
                   autofillHints: [AutofillHints.name],

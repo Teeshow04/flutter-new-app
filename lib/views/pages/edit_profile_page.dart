@@ -24,7 +24,6 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   String? imagePath;
   bool _obscurePassword = true;
-  bool _isLoading = false;
 
   // Store original login credentials
   // String originalEmail = '';
@@ -37,9 +36,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   }
 
   Future<void> _loadSavedData() async {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() {});
 
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -50,12 +47,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
         passwordController.text = prefs.getString('password') ?? '';
         dobController.text = prefs.getString('dob') ?? '';
         imagePath = prefs.getString('profileImage');
-        _isLoading = false;
       });
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
 
       if (mounted) {
         ScaffoldMessenger.of(
@@ -144,9 +138,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       return;
     }
 
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() {});
 
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -185,9 +177,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
       );
     } finally {
-      setState(() {
-        _isLoading = false;
-      });
+      setState(() {});
     }
   }
 
